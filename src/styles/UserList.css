@@ -1,0 +1,287 @@
+/*body {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    font-family: 'Spline Sans', sans-serif;
+}
+
+.user-list-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #262626;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.user-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #333;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.user-name {
+    flex-grow: 1;
+    margin-left: 20px;
+    font-size: 18px;
+}
+
+.user-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-button,
+.delete-button {
+    background-color: #555;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #fff;
+    font-size: 18px;
+}
+
+.edit-button:hover {
+    background-color: #0099ff;
+}
+
+.delete-button:hover {
+    background-color: #ff0000;
+}
+
+.delete-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #262626;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.delete-modal p {
+    margin-bottom: 20px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.confirm-delete-button {
+    background-color: #ff0000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.cancel-delete-button {
+    background-color: #555;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.confirm-delete-button:hover {
+    background-color: #cc0000;
+}
+
+.cancel-delete-button:hover {
+    background-color: #333;
+}*/
+
+/* Estilo del contenedor principal */
+.user-list-container {
+    padding: 20px; /* Separación interna */
+    margin-top: 90px; /* Asegura que el contenido quede debajo del navbar con más espacio */
+    background-color: #1a1a1a; /* Fondo oscuro */
+    color: #ffffff; /* Texto blanco */
+    min-height: 100vh; /* Asegura que ocupe toda la pantalla */
+}
+
+/* Estilo del título */
+.user-list-container h2 {
+    font-size: 24px;
+    color: #ffffff;
+    margin-bottom: 30px; /* Más separación del contenido */
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+/* Estilo de la lista de usuarios */
+.user-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Espaciado entre los elementos */
+    justify-content: center;
+}
+
+/* Estilo de cada elemento de usuario */
+.user-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #262626; /* Fondo de cada tarjeta */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra */
+    width: 200px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.user-item:hover {
+    transform: scale(1.05); /* Efecto de zoom al pasar el cursor */
+}
+
+/* Estilo del avatar */
+.user-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%; /* Hacerlo circular */
+    margin-bottom: 10px;
+    object-fit: cover;
+    border: 2px solid #77181D; /* Borde decorativo */
+}
+
+/* Estilo del nombre del usuario */
+.user-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+/* Estilo de los botones de acción */
+.user-actions {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.edit-button,
+.delete-button {
+    background-color: #333;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+    background-color: #0066cc; /* Azul para editar */
+}
+
+.delete-button:hover {
+    background-color: #cc0000; /* Rojo para eliminar */
+}
+
+/* Estilo del modal de confirmación */
+.delete-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #262626;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    z-index: 1000; /* Asegura que esté encima de todo */
+    width: 300px;
+}
+
+.delete-modal p {
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.confirm-delete-button,
+.cancel-delete-button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #ffffff;
+    width: 45%;
+    transition: background-color 0.3s ease;
+}
+
+.confirm-delete-button {
+    background-color: #cc0000; /* Rojo para confirmar */
+}
+
+.confirm-delete-button:hover {
+    background-color: #990000;
+}
+
+.cancel-delete-button {
+    background-color: #333;
+}
+
+.cancel-delete-button:hover {
+    background-color: #555;
+}
+
+/* Ajustes del navbar */
+.navbarrep h2 {
+    font-size: 24px;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    text-decoration: none; /* Sin subrayado */
+}
+
+.navbarrep {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0d0d0d;
+    padding: 10px 20px;
+    border-bottom: none; /* Sin línea debajo del navbar */
+    width: 100%;
+    box-sizing: border-box;
+}
+
