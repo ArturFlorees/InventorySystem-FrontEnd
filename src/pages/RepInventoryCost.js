@@ -130,6 +130,7 @@ function InventoryCostReport() {
           <div className="inventory-cost-table">
             <table>
               <thead>
+
               <tr>
                 <th>ID</th>
                 <th>Producto</th>

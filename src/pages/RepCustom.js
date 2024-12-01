@@ -49,7 +49,7 @@ function CustomReports() {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
-
+  
   // Manejar columnas visibles
   const handleColumnToggle = (column) => {
     setFilters((prev) => ({
@@ -292,6 +292,7 @@ function CustomReports() {
               <thead>
               <tr>
                 {filters.includeColumns.id && <th>ID</th>}
+
                 {filters.includeColumns.productName && <th>Producto</th>}
                 {filters.includeColumns.category && <th>Categoría</th>}
                 {filters.includeColumns.stock && <th>Stock disponible</th>}

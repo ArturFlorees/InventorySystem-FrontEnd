@@ -4,6 +4,7 @@ import '../styles/ReportsPage.css';
 import { FaBox, FaClipboardList, FaPlus } from 'react-icons/fa';
 
 function Reports() {
+
   const [loggedInUser, setLoggedInUser] = useState({});
 
   useEffect(() => {
