@@ -1,4 +1,3 @@
-
 body {
     font-family: 'Spline Sans', sans-serif;
     background-color: #1a1a1a;
@@ -106,4 +105,36 @@ body {
   .logout-button:hover {
     background-color: #990000;
   }
-  
+
+.profile-picture {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
+}
+
+.profile-picture img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.upload-icon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #77181D;
+  color: white;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s;
+}
+
+.upload-icon:hover {
+  transform: scale(1.1);
+}
