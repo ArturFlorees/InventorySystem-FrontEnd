@@ -1,25 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/Dashboard.css';
-import { FaBox, FaUserFriends, FaFileAlt, FaUsers } from 'react-icons/fa';
+import { FaBox, FaUserFriends, FaFileAlt, FaUsers, FaDollarSign, FaTags, FaExclamationTriangle } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Dashboard() {
   const [username, setUsername] = useState('');
-  const [userId, setUserId] = useState(''); // Para gestionar el ID del usuario logueado
+  const [userId, setUserId] = useState('');
+  const [stats, setStats] = useState({
+    totalProducts: 0,
+    totalUsers: 0,
+    totalStock: 0,
+    totalInventoryValue: 0,
+    lowStockAlerts: 0,
+    totalCategories: 0,
+  });
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    const storedProducts = JSON.parse(localStorage.getItem('products')) || [];
+    const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
 
     if (!loggedInUser) {
-      // Si no hay un usuario autenticado, redirigir a la página de inicio de sesión
       navigate('/login');
     } else {
-      // Establecer el nombre y ID del usuario autenticado
       setUsername(loggedInUser.username);
-      setUserId(loggedInUser.id); // Aseguramos que el ID esté disponible
+      setUserId(loggedInUser.id);
+      calculateStats(storedProducts, storedUsers); // Calcular estadísticas desde `localStorage`
     }
   }, [navigate]);
+
+  const calculateStats = (inventoryData, usersData) => {
+    const totalValue = inventoryData.reduce(
+        (acc, product) => acc + (product.price || 0) * (product.quantity || 0),
+        0
+    );
+    const lowStock = inventoryData.filter((product) => product.quantity <= 10).length;
+    const categories = [...new Set(inventoryData.map((product) => product.category))].length;
+
+    setStats({
+      totalProducts: inventoryData.length,
+      totalUsers: usersData.length,
+      totalStock: inventoryData.reduce((acc, product) => acc + (product.quantity || 0), 0),
+      totalInventoryValue: totalValue,
+      lowStockAlerts: lowStock,
+      totalCategories: categories,
+    });
+  };
 
   return (
       <div className="dashboard-page">
@@ -51,33 +79,48 @@ function Dashboard() {
               <button className="add-product-button">Añadir producto</button>
             </Link>
           </div>
-          <div className="subtitle">
-            <h3>Productos principales</h3>
-          </div>
-          <div className="products-container">
-            <div className="product-card">
-              <img src="https://via.placeholder.com/150" alt="Switch Catalyst" />
-              <h4>Switch Catalyst</h4>
-              <p>20 unidades</p>
-              <p>$57,042.99</p>
+          <div className="dashboard-stats">
+            <div className="stat-card stat-products">
+              <FaBox className="stat-icon" />
+              <div className="stat-info">
+                <h3>{stats.totalProducts}</h3>
+                <p>Productos Totales</p>
+              </div>
             </div>
-            <div className="product-card">
-              <img src="https://via.placeholder.com/150" alt="Firewall FortiGate" />
-              <h4>Firewall FortiGate</h4>
-              <p>20 unidades</p>
-              <p>$28,000.00</p>
+            <div className="stat-card stat-users">
+              <FaUsers className="stat-icon" />
+              <div className="stat-info">
+                <h3>{stats.totalUsers}</h3>
+                <p>Usuarios Totales</p>
+              </div>
             </div>
-            <div className="product-card">
-              <img src="https://via.placeholder.com/150" alt="Router tp-link Archer" />
-              <h4>Router tp-link Archer</h4>
-              <p>20 unidades</p>
-              <p>$6,720.00</p>
+            <div className="stat-card stat-stock">
+              <FaBox className="stat-icon" />
+              <div className="stat-info">
+                <h3>{stats.totalStock}</h3>
+                <p>Existencias Totales</p>
+              </div>
             </div>
-            <div className="product-card">
-              <img src="https://via.placeholder.com/150" alt="HikVision Cámara IP" />
-              <h4>HikVision Cámara IP</h4>
-              <p>30 unidades</p>
-              <p>$5,604.00</p>
+            <div className="stat-card stat-inventory-value">
+              <FaDollarSign className="stat-icon" />
+              <div className="stat-info">
+                <h3>${stats.totalInventoryValue.toLocaleString('es-MX')}</h3>
+                <p>Valor Inventario</p>
+              </div>
+            </div>
+            <div className="stat-card stat-categories">
+              <FaTags className="stat-icon" />
+              <div className="stat-info">
+                <h3>{stats.totalCategories}</h3>
+                <p>Categorías Totales</p>
+              </div>
+            </div>
+            <div className="stat-card stat-alerts">
+              <FaExclamationTriangle className="stat-icon" />
+              <div className="stat-info">
+                <h3>{stats.lowStockAlerts}</h3>
+                <p>Alertas de Stock Bajo</p>
+              </div>
             </div>
           </div>
         </div>

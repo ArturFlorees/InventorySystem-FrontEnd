@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/LoginPage.css';
@@ -7,6 +6,7 @@ function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [notification, setNotification] = useState(''); // Para manejar notificaciones
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -23,6 +23,7 @@ function LoginPage() {
 
     // Reiniciar estados
     setError('');
+    setNotification('');
     setLoading(true);
 
     // Simular una pequeña demora para la experiencia de usuario
@@ -37,8 +38,11 @@ function LoginPage() {
       if (user) {
         // Guardar el usuario autenticado en localStorage
         localStorage.setItem('loggedInUser', JSON.stringify(user));
-        alert('Inicio de sesión exitoso');
-        navigate('/dashboard'); // Redirigir al dashboard o página principal
+        setNotification('Inicio de sesión exitoso');
+        setTimeout(() => {
+          setNotification('');
+          navigate('/dashboard'); // Redirigir al dashboard o página principal
+        }, 2000);
       } else {
         setError('Usuario o contraseña incorrectos.');
       }
@@ -58,6 +62,11 @@ function LoginPage() {
           </Link>
         </div>
         <div className="login-container">
+          {notification && (
+              <div className="notification">
+                {notification}
+              </div>
+          )}
           <h2>Iniciar sesión</h2>
           <form onSubmit={handleLogin}>
             <div className="input-group">

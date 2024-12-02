@@ -7,6 +7,7 @@ function RegisterPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [notification, setNotification] = useState(''); // Para manejar notificaciones
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -47,8 +48,12 @@ function RegisterPage() {
     users.push(newUser);
     localStorage.setItem('users', JSON.stringify(users));
 
-    alert('Registro exitoso. Ahora puedes iniciar sesión.');
-    navigate('/login'); // Redirigir a la página de inicio de sesión
+    // Mostrar notificación de éxito
+    setNotification('Registro exitoso. Ahora puedes iniciar sesión.');
+    setTimeout(() => {
+      setNotification('');
+      navigate('/login'); // Redirigir a la página de inicio de sesión
+    }, 2000);
   };
 
   return (
@@ -59,6 +64,11 @@ function RegisterPage() {
           </Link>
         </div>
         <div className="register-container">
+          {notification && (
+              <div className="notification">
+                {notification}
+              </div>
+          )}
           <h2>Regístrate</h2>
           <form onSubmit={handleRegister}>
             <div className="input-group">

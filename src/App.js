@@ -13,7 +13,10 @@ import RepInventoryCost from './pages/RepInventoryCost.js';
 import RepCustom from './pages/RepCustom.js';
 import UserList from './pages/UserList.js';
 
+
 function App() {
+
+
   return (
       <Router>
         <Routes>
@@ -27,10 +30,12 @@ function App() {
           <Route path="/repactualstock" element={<RepActualStock />} />
           <Route path="/repinventorycost" element={<RepInventoryCost />} />
           <Route path="/repcustom" element={<RepCustom />} />
-          <Route path="/userlist" element={<UserList />} /> {/* Nueva ruta para UserList */}
+          <Route path="/userlist" element={<UserList />} />
           <Route path="/repactualstock" element={<RepActualStock />} />
           <Route path="/repinventorycost" element={<RepInventoryCost />} />
           <Route path="/repcustom" element={<RepCustom />} />
+          <Route path="/inventory" element={<Inventory />} />
+          <Route path="/edit-product/:productId" element={<AddEditProducts />} />
         </Routes>
       </Router>
   );

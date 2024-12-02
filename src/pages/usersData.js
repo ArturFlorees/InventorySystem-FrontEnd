@@ -1,39 +1,37 @@
 const usersData = [
 
     {
-        id: '001',
-        name: 'Alan García',
-        email: 'alan@example.com',
+        id: '005',
+        name: 'Alan Lopez Cetina',
+        email: 'alanctina@pctechnosystem.com',
         position: 'Administrador',
+        employeeNumber: 'E002',
+        avatar: 'https://via.placeholder.com/150',
+    },
+
+    {
+        id: '006',
+        name: 'Jose Arturo Gonzalez',
+        email: 'arturogonza@pctechnosystem.com',
+        position: 'Tecnico',
+        employeeNumber: 'E003',
+        avatar: 'https://via.placeholder.com/150',
+    },
+
+    {
+        id: '008',
+        name: 'Horacio Henandez Perez',
+        email: 'horacioperez@pctechnosystem.com',
+        position: 'CEO',
         employeeNumber: 'E001',
         avatar: 'https://via.placeholder.com/150',
     },
-    {
-        id: '002',
-        name: 'María López',
-        email: 'maria@example.com',
-        position: 'Gerente',
-        employeeNumber: 'E002',
-        avatar: 'https://via.placeholder.com/150',
-    },
 
-    {
-        id: '003',
-        name: 'Alan Cetina',
-        email: 'maria@example.com',
-        position: 'Gerente',
-        employeeNumber: 'E002',
-        avatar: 'https://via.placeholder.com/150',
-    },
 
-    {
-        id: '004',
-        name: 'Jose Arturo',
-        email: 'maria@example.com',
-        position: 'Gerente',
-        employeeNumber: 'E002',
-        avatar: 'https://via.placeholder.com/150',
-    },
+
+
+
+
 ];
 
 
