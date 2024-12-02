@@ -50,21 +50,21 @@ body {
     border-radius: 50%;
   }
   
-  .form-group {
+  .form-group-profile {
     margin-bottom: 20px;
     text-align: left;
     width: 2000px;
     /* margin-right: 2px; */
   }
   
-  .form-group label {
+  .form-group-profile label {
     display: block;
     margin-bottom: 5px;
     font-size: 16px;
     color: #ffffff;
   }
   
-  .form-group input {
+  .form-group-profile input {
     width: 500px;
     padding: 10px;
     border-radius: 5px;

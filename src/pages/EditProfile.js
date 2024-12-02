@@ -104,7 +104,7 @@ function EditProfile() {
             />
           </div>
           <form>
-            <div className="form-group">
+            <div className="form-group-profile">
               <label>Usuario</label>
               <input
                   type="text"
@@ -114,7 +114,7 @@ function EditProfile() {
                   required
               />
             </div>
-            <div className="form-group">
+            <div className="form-group-profile">
               <label>Correo electrónico</label>
               <input
                   type="email"
@@ -124,7 +124,7 @@ function EditProfile() {
                   required
               />
             </div>
-            <div className="form-group">
+            <div className="form-group-profile">
               <label>No. Empleado</label>
               <input
                   type="text"
@@ -134,7 +134,7 @@ function EditProfile() {
                   required
               />
             </div>
-            <div className="form-group">
+            <div className="form-group-profile">
               <label>Puesto</label>
               <input
                   type="text"
