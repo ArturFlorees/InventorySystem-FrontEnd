@@ -16,6 +16,8 @@ function EditProfile() {
     avatar: '', // Campo para la foto de perfil
   });
 
+  const [notification, setNotification] = useState(''); // Para manejar notificaciones
+
   useEffect(() => {
     const storedUsers = JSON.parse(localStorage.getItem('users')) || usersData;
     const userToEdit = storedUsers.find((user) => user.id === id);
@@ -29,8 +31,11 @@ function EditProfile() {
         avatar: userToEdit.avatar || 'https://via.placeholder.com/150', // Imagen por defecto si no tiene una foto de perfil
       });
     } else {
-      alert('Usuario no encontrado');
-      navigate('/userlist'); // Redirigir a la gestión de usuarios si el ID no es válido
+      setNotification('Usuario no encontrado');
+      setTimeout(() => {
+        setNotification('');
+        navigate('/userlist'); // Redirigir a la gestión de usuarios si el ID no es válido
+      }, 3000);
     }
   }, [id, navigate]);
 
@@ -50,7 +55,8 @@ function EditProfile() {
         };
         reader.readAsDataURL(file);
       } else {
-        alert('Solo se permiten imágenes en formato PNG o JPG.');
+        setNotification('Solo se permiten imágenes en formato PNG o JPG.');
+        setTimeout(() => setNotification(''), 3000);
         e.target.value = null; // Limpiar el campo de archivo
       }
     }
@@ -64,8 +70,11 @@ function EditProfile() {
     );
 
     localStorage.setItem('users', JSON.stringify(updatedUsers));
-    alert('Perfil actualizado correctamente');
-    navigate('/userlist'); // Redirigir a la gestión de usuarios
+    setNotification('Perfil actualizado correctamente.');
+    setTimeout(() => {
+      setNotification('');
+      navigate('/userlist'); // Redirigir a la gestión de usuarios
+    }, 3000);
   };
 
   return (
@@ -76,6 +85,11 @@ function EditProfile() {
           </Link>
         </div>
         <div className="edit-profile-container">
+          {notification && (
+              <div className="notification">
+                {notification}
+              </div>
+          )}
           <div className="profile-picture">
             <img src={userData.avatar} alt="Profile" />
             <label htmlFor="file-upload" className="upload-icon">

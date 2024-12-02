@@ -285,3 +285,24 @@ h2 {
     box-sizing: border-box;
 }
 
+.notification {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: #4caf50; /* Verde para éxito */
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    font-size: 16px;
+    animation: fade-in-out 3s ease-in-out;
+}
+
+@keyframes fade-in-out {
+    0% { opacity: 0; transform: translateY(-10px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-10px); }
+}
+

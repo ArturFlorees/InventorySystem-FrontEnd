@@ -191,7 +191,7 @@ function CustomReports() {
           </Link>
           <div className="user-info">
             <Link className="home" to="/editprofile">
-              <span className="user">Alan</span>
+
             </Link>
           </div>
         </div>

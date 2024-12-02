@@ -8,46 +8,60 @@ function Inventory() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loggedInUser, setLoggedInUser] = useState({});
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    // Obtener productos del localStorage
-    const storedProducts = JSON.parse(localStorage.getItem('products')) || [];
+    // Cargar productos solo al inicio de la aplicación
+    const initializeProducts = () => {
+      const storedProducts = JSON.parse(localStorage.getItem('products'));
 
-    // Combinar productos de data.js y localStorage
-    const combinedProducts = [
-      ...productsData.filter(
-          (dataProduct) =>
-              !storedProducts.some((storedProduct) => storedProduct.id === dataProduct.id)
-      ),
-      ...storedProducts,
-    ];
+      if (!storedProducts) {
+        // Si no hay productos en localStorage, guardar los datos iniciales
+        localStorage.setItem('products', JSON.stringify(productsData));
+        setProducts(productsData);
+      } else {
+        // Si ya existen productos, cargarlos desde localStorage
+        setProducts(storedProducts);
+      }
+    };
 
-    // Guardar productos combinados en localStorage
-    localStorage.setItem('products', JSON.stringify(combinedProducts));
-
-    // Actualizar el estado con los productos combinados
-    setProducts(combinedProducts);
-
-    // Obtener el usuario que inició sesión
+    // Cargar el usuario logueado
     const user = JSON.parse(localStorage.getItem('loggedInUser'));
     if (user) {
       setLoggedInUser(user);
     }
+
+    initializeProducts();
   }, []);
 
   const handleDelete = (id) => {
-    // Eliminar el producto del estado
-    const updatedProducts = products.filter((product) => product.id !== id);
-    setProducts(updatedProducts);
+    if (isDeleting) return;
 
-    // Actualizar el localStorage
-    localStorage.setItem('products', JSON.stringify(updatedProducts));
-
-    alert(`Producto con ID ${id} eliminado.`);
+    setIsDeleting(true);
+    setTimeout(() => {
+      const updatedProducts = products.filter((product) => product.id !== id);
+      setProducts(updatedProducts);
+      localStorage.setItem('products', JSON.stringify(updatedProducts)); // Actualizar localStorage
+      setIsDeleting(false);
+    }, 500);
   };
 
-  const filteredProducts = products.filter((product) =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const handleEdit = (updatedProduct) => {
+    const updatedProducts = products.map((product) =>
+        product.id === updatedProduct.id ? updatedProduct : product
+    );
+    setProducts(updatedProducts);
+    localStorage.setItem('products', JSON.stringify(updatedProducts)); // Actualizar localStorage
+  };
+
+  const handleAdd = (newProduct) => {
+    const updatedProducts = [...products, newProduct];
+    setProducts(updatedProducts);
+    localStorage.setItem('products', JSON.stringify(updatedProducts)); // Actualizar localStorage
+  };
+
+  const filteredProducts = products.filter(
+      (product) => product.name && product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -85,53 +99,61 @@ function Inventory() {
               <option value="location">Ubicación</option>
             </select>
           </div>
-          <table className="inventory-table">
-            <thead>
-            <tr>
-              <th>ID</th>
-              <th>Producto</th>
-              <th>Categoría</th>
-              <th>Cantidad</th>
-              <th>Precio</th>
-              <th>Ubicación</th>
-              <th>Fecha de ingreso</th>
-              <th>Editar/Eliminar</th>
-            </tr>
-            </thead>
-            <tbody>
-            {filteredProducts.map((product) => (
-                <tr key={product.id}>
-                  <td>{product.id}</td>
-                  <td>
-                    <div className="product-info">
-                      <div className="product-image">
-                        <img src={product.image} alt={product.name} />
-                      </div>
-                      {product.name}
-                    </div>
-                  </td>
-                  <td>{product.category}</td>
-                  <td>{product.quantity}</td>
-                  <td>${product.price.toFixed(2)}</td>
-                  <td>{product.location}</td>
-                  <td>{product.date}</td>
-                  <td>
-                    <Link to={`/edit-product/${product.id}`}>
-                      <button className="edit-button">
-                        <FaEdit />
-                      </button>
-                    </Link>
-                    <button
-                        className="delete-button"
-                        onClick={() => handleDelete(product.id)}
-                    >
-                      <FaTrashAlt />
-                    </button>
-                  </td>
+          {filteredProducts.length > 0 ? (
+              <table className="inventory-table">
+                <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Producto</th>
+                  <th>Categoría</th>
+                  <th>Cantidad</th>
+                  <th>Precio</th>
+                  <th>Ubicación</th>
+                  <th>Fecha de ingreso</th>
+                  <th>Editar/Eliminar</th>
                 </tr>
-            ))}
-            </tbody>
-          </table>
+                </thead>
+                <tbody>
+                {filteredProducts.map((product) => (
+                    <tr key={product.id}>
+                      <td>{product.id}</td>
+                      <td>
+                        <div className="product-info">
+                          <div className="product-image">
+                            <img
+                                src={product.image || 'https://via.placeholder.com/100'}
+                                alt={product.name || 'Producto sin nombre'}
+                            />
+                          </div>
+                          {product.name}
+                        </div>
+                      </td>
+                      <td>{product.category || 'Sin categoría'}</td>
+                      <td>{product.quantity || 0}</td>
+                      <td>${(product.price || 0).toFixed(2)}</td>
+                      <td>{product.location || 'Sin ubicación'}</td>
+                      <td>{product.date || 'Sin fecha'}</td>
+                      <td>
+                        <Link to={`/edit-product/${product.id}`}>
+                          <button className="edit-button">
+                            <FaEdit />
+                          </button>
+                        </Link>
+                        <button
+                            className="delete-button"
+                            onClick={() => handleDelete(product.id)}
+                            disabled={isDeleting}
+                        >
+                          <FaTrashAlt />
+                        </button>
+                      </td>
+                    </tr>
+                ))}
+                </tbody>
+              </table>
+          ) : (
+              <p>No se encontraron productos.</p>
+          )}
         </div>
       </div>
   );

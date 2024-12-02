@@ -7,30 +7,45 @@ import usersData from '../pages/usersData'; // Datos iniciales de usuarios
 function UserList() {
     const [users, setUsers] = useState([]);
     const [userToDelete, setUserToDelete] = useState(null); // Usuario seleccionado para eliminar
+    const [notification, setNotification] = useState(''); // Para manejar notificaciones
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Cargar datos desde `localStorage` o usar `usersData` como base
-        const storedUsers = JSON.parse(localStorage.getItem('users'));
-        if (storedUsers) {
-            setUsers(storedUsers);
-        } else {
-            setUsers(usersData);
-            localStorage.setItem('users', JSON.stringify(usersData)); // Inicializar `localStorage`
-        }
+        const initializeUsers = () => {
+            // Obtener los usuarios almacenados en `localStorage`
+            const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
+
+            // Crear una combinación única de usuarios de `usersData` y `storedUsers`
+            const combinedUsers = [
+                ...storedUsers,
+                ...usersData.filter(
+                    (userData) =>
+                        !storedUsers.some((storedUser) => storedUser.id === userData.id)
+                ),
+            ];
+
+            // Actualizar estado y `localStorage`
+            setUsers(combinedUsers);
+            localStorage.setItem('users', JSON.stringify(combinedUsers));
+        };
+
+        initializeUsers();
     }, []);
 
-    useEffect(() => {
-        if (users.length > 0) {
-            localStorage.setItem('users', JSON.stringify(users));
-        }
-    }, [users]);
-
     const handleDeleteUser = (id) => {
+        // Eliminar el usuario del estado
         const updatedUsers = users.filter((user) => user.id !== id);
         setUsers(updatedUsers);
+
+        // Actualizar el `localStorage`
+        localStorage.setItem('users', JSON.stringify(updatedUsers));
+
+        // Mostrar notificación
+        setNotification('Usuario eliminado correctamente.');
+        setTimeout(() => setNotification(''), 3000); // Desaparecer notificación después de 3 segundos
+
+        // Limpiar la ventana de confirmación
         setUserToDelete(null);
-        alert('Usuario eliminado correctamente.');
     };
 
     const cancelDelete = () => {
@@ -45,10 +60,19 @@ function UserList() {
                 </Link>
             </div>
             <h2>Gestión de Usuarios</h2>
+            {notification && (
+                <div className="notification">
+                    {notification}
+                </div>
+            )}
             <div className="user-list">
                 {users.map((user) => (
                     <div className="user-item" key={user.id}>
-                        <img src={user.avatar} alt={user.name} className="user-avatar" />
+                        <img
+                            src={user.avatar || 'https://via.placeholder.com/100'}
+                            alt={user.name}
+                            className="user-avatar"
+                        />
                         <span className="user-name">{user.name}</span>
                         <div className="user-actions">
                             <button

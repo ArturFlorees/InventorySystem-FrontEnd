@@ -11,7 +11,8 @@ function AddEditProducts() {
     const [category, setCategory] = useState('');
     const [location, setLocation] = useState('');
     const [image, setImage] = useState('');
-    const [showStockRanges, setShowStockRanges] = useState(false); // Mostrar u ocultar rangos
+    const [showStockRanges, setShowStockRanges] = useState(false);
+    const [notification, setNotification] = useState(''); // Para manejar alertas
 
     // Rango de stock personalizado
     const [stockRanges, setStockRanges] = useState({
@@ -42,7 +43,7 @@ function AddEditProducts() {
                         criticalMax: product.stockRanges.critical.max.toString(),
                     });
                 }
-                setShowStockRanges(!!product.stockRanges); // Mostrar rangos si el producto los tiene
+                setShowStockRanges(!!product.stockRanges);
             }
         }
     }, [productId]);
@@ -55,7 +56,8 @@ function AddEditProducts() {
             parseInt(lowMax) >= parseInt(normalMin) ||
             parseInt(normalMin) >= parseInt(normalMax)
         ) {
-            alert('Por favor, asegúrate de que los rangos de stock sean coherentes.');
+            setNotification('Por favor, asegúrate de que los rangos de stock sean coherentes.');
+            setTimeout(() => setNotification(''), 3000); // Desaparecer alerta después de 3 segundos
             return false;
         }
         return true;
@@ -75,7 +77,8 @@ function AddEditProducts() {
                     !stockRanges.lowMax ||
                     !stockRanges.criticalMax))
         ) {
-            alert('Por favor, completa todos los campos antes de guardar.');
+            setNotification('Por favor, completa todos los campos antes de guardar.');
+            setTimeout(() => setNotification(''), 3000);
             return;
         }
 
@@ -86,7 +89,6 @@ function AddEditProducts() {
         const products = JSON.parse(localStorage.getItem('products')) || [];
 
         if (productId) {
-            // Editar producto
             const updatedProducts = products.map((product) =>
                 product.id === productId
                     ? {
@@ -116,9 +118,8 @@ function AddEditProducts() {
                     : product
             );
             localStorage.setItem('products', JSON.stringify(updatedProducts));
-            alert('Producto editado correctamente.');
+            setNotification('Producto editado correctamente.');
         } else {
-            // Añadir nuevo producto
             const newProduct = {
                 id: (products.length + 1).toString().padStart(3, '0'),
                 name: productName,
@@ -146,10 +147,13 @@ function AddEditProducts() {
             };
             products.push(newProduct);
             localStorage.setItem('products', JSON.stringify(products));
-            alert('Producto añadido correctamente.');
+            setNotification('Producto añadido correctamente.');
         }
 
-        navigate('/inventory'); // Redirigir al inventario
+        setTimeout(() => {
+            setNotification('');
+            navigate('/inventory'); // Redirigir al inventario
+        }, 2000);
     };
 
     return (
@@ -159,6 +163,11 @@ function AddEditProducts() {
                     <h2>PCTECHNOSYSTEM</h2>
                 </Link>
             </div>
+            {notification && (
+                <div className="notification">
+                    {notification}
+                </div>
+            )}
             <div className="add-edit-product-container">
                 <h2>{productId ? 'Editar producto' : 'Añadir producto'}</h2>
                 <form>

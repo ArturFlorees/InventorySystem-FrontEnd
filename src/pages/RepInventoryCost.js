@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import '../styles/RepInventoryCost.css';
-import { FaPlus } from 'react-icons/fa';
-import productsData from '../pages/data';
+import { FaTrashAlt } from 'react-icons/fa';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -12,54 +11,55 @@ const formatNumber = (number) => {
   return number.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 };
 
-function InventoryCostReport() {
+function ReportInventoryCost() {
   const [data, setData] = useState([]);
   const [totalCost, setTotalCost] = useState(0);
-  const navigate = useNavigate(); // Para redirigir al formulario de añadir producto
+  const [itemToDelete, setItemToDelete] = useState(null); // Para manejar la confirmación de eliminación
 
-  // Cargar datos de `data.js` y `localStorage`
   useEffect(() => {
     const storedProducts = JSON.parse(localStorage.getItem('products')) || [];
-    const combinedProducts = [
-      ...productsData.filter(
-          (dataProduct) =>
-              !storedProducts.some((storedProduct) => storedProduct.id === dataProduct.id)
-      ),
-      ...storedProducts,
-    ];
-
-    const calculatedData = combinedProducts.map((product) => ({
+    const calculatedData = storedProducts.map((product) => ({
       id: product.id || 'N/A',
-      productName: product.name || product.productName || 'Sin nombre',
+      productName: product.name || 'Sin nombre',
       unitPrice: product.price || 0,
       quantity: product.quantity || 0,
       subtotal: (product.price || 0) * (product.quantity || 0),
     }));
 
     setData(calculatedData);
-
-    // Calcular el costo total del inventario
-    const total = calculatedData.reduce((acc, product) => acc + product.subtotal, 0);
-    setTotalCost(total);
+    calculateTotalCost(calculatedData);
   }, []);
 
-  // Exportar a Excel
+  const calculateTotalCost = (products) => {
+    const total = products.reduce((acc, product) => acc + product.subtotal, 0);
+    setTotalCost(total);
+  };
+
+  const confirmDelete = (id) => {
+    setItemToDelete(id); // Guardar el ID del producto para confirmar eliminación
+  };
+
+  const handleDelete = () => {
+    if (!itemToDelete) return;
+    const updatedData = data.filter((item) => item.id !== itemToDelete);
+    setData(updatedData);
+    calculateTotalCost(updatedData);
+    setItemToDelete(null); // Limpiar el estado de confirmación
+  };
+
+  const cancelDelete = () => {
+    setItemToDelete(null); // Cancelar la acción de eliminar
+  };
+
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(data);
-
-    // Agregar encabezados personalizados
     const headers = ['ID', 'Producto', 'Precio unitario', 'Cantidad', 'Subtotal'];
     XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
-
-    // Crear libro de trabajo y hoja
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Costos de Inventario');
-
-    // Guardar el archivo
     XLSX.writeFile(workbook, 'costos_inventario.xlsx');
   };
 
-  // Exportar a PDF
   const exportToPDF = () => {
     const doc = new jsPDF();
     const tableColumn = ['ID', 'Producto', 'Precio unitario', 'Cantidad', 'Subtotal'];
@@ -70,7 +70,6 @@ function InventoryCostReport() {
       item.quantity,
       `$${formatNumber(item.subtotal)}`,
     ]);
-
     doc.text('Reporte de Costos de Inventario', 14, 10);
     doc.autoTable({
       head: [tableColumn],
@@ -80,7 +79,6 @@ function InventoryCostReport() {
     doc.save('costos_inventario.pdf');
   };
 
-  // Exportar a CSV
   const exportToCSV = () => {
     const csvContent = [
       ['ID', 'Producto', 'Precio unitario', 'Cantidad', 'Subtotal'],
@@ -92,19 +90,16 @@ function InventoryCostReport() {
         `$${formatNumber(item.subtotal)}`,
       ]),
     ]
-        .map((e) => e.join(','))
+        .map((row) => row.join(','))
         .join('\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.setAttribute('download', 'costos_inventario.csv');
+    document.body.appendChild(link);
     link.click();
-  };
-
-  // Redirigir a añadir producto
-  const handleAddProduct = () => {
-    navigate('/addeditproducts'); // Redirigir a la página de añadir producto
+    document.body.removeChild(link);
   };
 
   return (
@@ -113,30 +108,21 @@ function InventoryCostReport() {
           <Link className="home" to="/dashboard">
             <h2 className="home">PCTECHNOSYSTEM</h2>
           </Link>
-          <div className="user-info">
-            <Link className="home" to="/editprofile">
-              <span className="user">Alan</span>
-            </Link>
-          </div>
         </div>
         <div className="main-content-inventory-cost">
           <div className="header">
             <h2>Costos de Inventario</h2>
-            <button className="add-item-button" onClick={handleAddProduct}>
-              <FaPlus /> Añadir nuevo producto
-            </button>
           </div>
-          <h3>Detalles</h3>
           <div className="inventory-cost-table">
             <table>
               <thead>
-
               <tr>
                 <th>ID</th>
                 <th>Producto</th>
                 <th>Precio unitario</th>
                 <th>Cantidad</th>
                 <th>Subtotal</th>
+                <th>Acciones</th>
               </tr>
               </thead>
               <tbody>
@@ -147,6 +133,11 @@ function InventoryCostReport() {
                     <td>${formatNumber(item.unitPrice)}</td>
                     <td>{item.quantity}</td>
                     <td>${formatNumber(item.subtotal)}</td>
+                    <td>
+                      <button className="delete-button" onClick={() => confirmDelete(item.id)}>
+                        <FaTrashAlt />
+                      </button>
+                    </td>
                   </tr>
               ))}
               </tbody>
@@ -167,8 +158,23 @@ function InventoryCostReport() {
             </button>
           </div>
         </div>
+
+        {/* Modal de confirmación para eliminar */}
+        {itemToDelete && (
+            <div className="delete-modal">
+              <p>¿Estás seguro de que deseas eliminar este producto?</p>
+              <div className="modal-actions">
+                <button className="confirm-delete-button" onClick={handleDelete}>
+                  Confirmar
+                </button>
+                <button className="cancel-delete-button" onClick={cancelDelete}>
+                  Cancelar
+                </button>
+              </div>
+            </div>
+        )}
       </div>
   );
 }
 
-export default InventoryCostReport;
+export default ReportInventoryCost;
