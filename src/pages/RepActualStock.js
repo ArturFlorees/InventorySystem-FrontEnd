@@ -168,13 +168,13 @@ function ActualStockReport() {
             </table>
           </div>
           <div className="export">
-            <button className="export-buttons" onClick={exportToExcel}>
+            <button className="export-buttons-inventory-cost" onClick={exportToExcel}>
               Exportar a Excel
             </button>
-            <button className="export-buttons" onClick={exportToPDF}>
+            <button className="export-buttons-inventory-cost" onClick={exportToPDF}>
               Exportar a PDF
             </button>
-            <button className="export-buttons" onClick={exportToCSV}>
+            <button className="export-buttons-inventory-cost" onClick={exportToCSV}>
               Exportar a CSV
             </button>
           </div>

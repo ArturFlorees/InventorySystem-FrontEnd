@@ -84,9 +84,14 @@ body {
   align-items: center;
   background-color: #333;
   padding: 20px;
+  margin-bottom: 0px;
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+}
+
+.parrafo {
+  margin-top: 0px;
 }
 
 .report-item:hover {

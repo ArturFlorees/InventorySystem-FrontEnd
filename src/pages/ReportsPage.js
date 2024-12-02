@@ -36,7 +36,7 @@ function Reports() {
           <h2>Reportes</h2>
           <p>Seguimiento y gestión del inventario</p>
 
-          <h3>Reportes de inventario</h3>
+          <h3>Reportes de inventario predeterminados</h3>
           <div className="report-items">
             {/* Link to Actual Stock Report */}
             <Link className="home" to="/repactualstock">
@@ -45,8 +45,8 @@ function Reports() {
                   <FaClipboardList />
                 </div>
                 <div className="report-info">
-                  <h4>Niveles de inventario</h4>
-                  <p>Monitorear niveles de inventario, recibir alertas de inventario bajo y reordenar productos</p>
+                  <h4>Reporte de stock actual</h4>
+                  <p>Con este reporte monitorea los niveles del stock</p>
                 </div>
                 <div className="arrow">&#8594;</div>
               </div>
@@ -59,21 +59,22 @@ function Reports() {
                   <FaBox />
                 </div>
                 <div className="report-info">
-                  <h4>Reporte general</h4>
-                  <p>Obtener una vista integral del inventario con este reporte</p>
+                  <h4>Reporte de costos de inventario</h4>
+                  <p>Con este reporte obtén una vista integral del costo del inventario</p>
                 </div>
                 <div className="arrow">&#8594;</div>
               </div>
             </Link>
+            <p className="parrafo">¡Expórtalos en el formato que desees!</p>
           </div>
 
-          <h3>Crear un nuevo reporte</h3>
+          <h3>Crear un reporte personalizado</h3>
           <Link className="home" to="/repcustom">
             <div className="create-report">
               <div className="icon">
                 <FaPlus />
               </div>
-              <p>Crear reporte personalizado</p>
+              <p>Crea un reporte que se adapte totalmente a tus necesidades</p>
             </div>
           </Link>
         </div>
