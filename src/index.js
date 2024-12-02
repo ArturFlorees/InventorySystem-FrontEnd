@@ -9,6 +9,11 @@ import './styles/Dashboard.css';
 import './styles/Inventory.css';
 import './styles/AddEditProducts.css';
 import './styles/EditProfile.css';
+import './styles/ReportsPage.css';
+import './styles/RepActualStock.css';
+import './styles/RepInventoryCost.css';
+import './styles/RepCustom.css';
+import './styles/UserList.css';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
